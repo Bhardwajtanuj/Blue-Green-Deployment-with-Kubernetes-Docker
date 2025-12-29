@@ -445,10 +445,3 @@ blue-green-k8s/
 - [Blue-Green Deployment Pattern](https://martinfowler.com/bliki/BlueGreenDeployment.html)
 - [Kubernetes Best Practices](https://kubernetes.io/docs/concepts/configuration/overview/)
 
-## 📄 License
-
-This project is open source and available for educational and commercial use.
-
----
-
-**Built with ❤️ for Zero-Downtime Deployments**
