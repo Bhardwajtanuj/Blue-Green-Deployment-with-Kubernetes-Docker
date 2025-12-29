@@ -1,0 +1,63 @@
+# .gitignore for Blue-Green Kubernetes Project
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Kubernetes
+*.bak
+/tmp/
+service-backup.yaml
+
+# Logs
+*.log
+blue-green-switches.log
+
+# Docker
+.dockerignore
+
+# Environment
+.env
+.env.local
+*.env
+
+# Secrets
+secrets/
+*.key
+*.pem
+
+# Temporary files
+*.tmp
+temp/

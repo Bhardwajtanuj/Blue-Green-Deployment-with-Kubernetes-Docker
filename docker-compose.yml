@@ -1,0 +1,70 @@
+# Docker Compose Configuration for Blue-Green Deployment
+# This is a simplified version that works without Kubernetes
+
+version: '3.8'
+
+services:
+  # Blue version of the application
+  app-blue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webapp-blue
+    environment:
+      - APP_VERSION=blue
+      - APP_PORT=5000
+      - ENVIRONMENT=production
+    ports:
+      - "5001:5000"
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - blue-green-network
+
+  # Green version of the application
+  app-green:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webapp-green
+    environment:
+      - APP_VERSION=green
+      - APP_PORT=5000
+      - ENVIRONMENT=production
+    ports:
+      - "5002:5000"
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - blue-green-network
+
+  # Nginx reverse proxy for traffic routing
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-proxy
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx-blue.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app-blue
+      - app-green
+    networks:
+      - blue-green-network
+    healthcheck:
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+networks:
+  blue-green-network:
+    driver: bridge
